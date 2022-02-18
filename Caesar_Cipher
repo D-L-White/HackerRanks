@@ -1,0 +1,23 @@
+string caesarCipher(string s, int k) {
+    // string to hold result
+    //  could also be done on s to save memory
+    string result = "";
+    // loop through provided string
+    for (int i = 0; i < s.length(); i++) {
+        // upper case cipher
+        if (s[i] >= 'A' && s[i] <= 'Z') {
+            // move to alphabet sized int + cipher, mod to new letter, move back to ascii uppercase
+            result += (s[i] - 'A' + k) % (26) + 'A';
+        }
+        // lower case cipher
+        else if (s[i] >= 'a' && s[i] <= 'z') {
+            // move to alphabet sized int + cipher, mod to new letter, move back to ascii lowercase
+            result += (s[i] - 'a' + k) % (26) + 'a';
+        }
+        // not a letter
+        else {
+            result += s[i];
+        }
+    }
+    return result;
+}
