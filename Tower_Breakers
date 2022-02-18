@@ -1,0 +1,15 @@
+int towerBreakers(int n, int m) {
+    // no towers to remove to start so player 2 wins
+    if (m == 1) {
+        return 2;
+    }
+    // even towers so player 2 just copies player 1 leaving them with nothing to do at end
+    if (n % 2 == 0) {
+        return 2;
+    }
+    // odd number of towers so second player can't copy the final action
+    else {
+        return 1;
+    }
+    
+}
