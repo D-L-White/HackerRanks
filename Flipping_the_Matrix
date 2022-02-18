@@ -1,17 +1,26 @@
 int flippingMatrix(vector<vector<int>> matrix) {
+    // maximum sum for quadrant
     int sum = 0;
+    // size of the matrix
     int size = matrix.size();
     
+    // no need to rotate - just get max value for each position in the quadrant
+    //  using size/2 to get only a quadrant
     for (int i = 0; i < size/2; i++) {
         for (int j = 0; j < size/2; j++) {
+            // vector to hold the values for a position
             vector<int> temp {};
+            // get position from each quadrant
             temp.push_back(matrix[i][j]);
             temp.push_back(matrix[i][size-1-j]);
             temp.push_back(matrix[size-1-i][j]);
             temp.push_back(matrix[size-1-i][size-1-j]);
+            // sort in order to get largest (std::max not working)
             sort(temp.begin(), temp.end());
+            // add largest to sum
             sum += temp[3];
         }
     }
+    // return our max of quadrant
     return sum;
 }
