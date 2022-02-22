@@ -1,0 +1,33 @@
+int superDigit(string n, int k) {
+    int result = 0;
+    // convert each character for initial sum
+    //  ensures no int out of bound issues with concatenation
+    for (int i = 0; i < n.length(); i++) {
+        result += n[i] - 48;
+    }
+    
+    // get first sum of digits
+    int temp = 0;
+    while (result > 0) {
+        temp += result % 10;
+        result /= 10;
+    }
+    // "concatenate" the extra digits
+    if (k != 0) {
+        result = temp * k;
+    }
+    
+    // check if a super digit
+    while (result > 10) {
+        // reset temp for next run
+        temp = 0;
+        // get next sum of digits
+        while (result > 0) {
+            temp += result % 10;
+            result /= 10;
+        }
+        result = temp;
+    }
+
+    return result;
+}
