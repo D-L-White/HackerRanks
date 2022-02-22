@@ -1,0 +1,78 @@
+#include <cmath>
+#include <cstdio>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+#include <stack>
+using namespace std;
+
+// a faux queue using two stacks
+typedef struct {
+    // the two stacks being used
+    //  stack 2 holds in reverse order for ease of adding more 
+    stack<int> stack1, stack2;
+    
+    // when wanting to add a new element
+    //  keeps stack1 as a first in first out queue
+    void enQueue(int x) {
+        // if both stacks are empty, add it to the first stack
+        if (stack1.empty() && stack2.empty()) {    
+            stack1.push(x);
+        }
+        // stack 1 has proper FIFO ordering, add to stack 2 for LIFO ordering
+        //  LIFO -> FIFO when moved in order to another LIFO (stack 1 when empty)
+        else {
+            stack2.push(x);
+        }
+    }
+    
+    // when wanting to remove the first in element
+    void deQueue() {
+        // check if stack 1 has any elements (all will be "FIFO")
+        if (stack1.empty()) {
+            // move stack 2 cache into stack 1
+            while (!stack2.empty()) {
+                stack1.push(stack2.top());
+                stack2.pop();
+            }
+        }
+        // remove the top of stack 1
+        stack1.pop();
+    }
+    
+    // when needing to know next element
+    void peek() {
+        // check if stack 1 has any elements (all will be "FIFO")
+        if (stack1.empty()) {
+            // move stack 2 cache into stack 1
+            while (!stack2.empty()) {
+                stack1.push(stack2.top());
+                stack2.pop();
+            }
+        }
+        // print out the top of stack 1
+        cout << stack1.top() << "\n";
+    }
+} Queue;
+
+int main() {
+    Queue fauxQueue;
+    int argCount;
+    cin >> argCount;
+    for (int i = 0; i <= argCount; i++) {
+        string arg;
+        getline(cin, arg);
+        if (arg[0] == '1') {
+            int num = stoi(arg.substr(2));
+            fauxQueue.enQueue(num);
+        }
+        else if (arg[0] == '2') {
+            fauxQueue.deQueue();
+        }
+        else if (arg[0] == '3') {
+            fauxQueue.peek();
+        }
+    }
+    /* Enter your code here. Read input from STDIN. Print output to STDOUT */   
+    return 0;
+}
