@@ -1,0 +1,42 @@
+string isBalanced(string s) {
+    if (s.length() % 2 != 0) {
+        return "NO";
+    }
+    stack<char> parens;
+    char latest;
+    
+    // grab all parens
+    for (int i = 0; i < s.length(); i++) {
+        if (s[i] == '(' || s[i] == '[' || s[i] == '{') {
+                parens.push(s[i]);
+        }
+        // check if closing paren is valid for latest open and remove if so
+        else {
+            // no more open parens for this closing one
+            if (parens.empty()) {
+                return "NO";
+            }
+            else {
+                // get last closing to compare with closing
+                latest = parens.top();
+                if ((s[i] == ')' && latest == '(') ||
+                    (s[i] == ']' && latest == '[') ||
+                    (s[i] == '}' && latest == '{')) {
+                    parens.pop();
+                }
+                // they don't pair
+                else {
+                    return "NO";
+                }
+            }
+        }
+    }
+    // all open were accounted for
+    if (parens.empty()) {
+        return "YES";
+    }
+    // some open still remaining
+    else {
+        return "NO";
+    }
+}
