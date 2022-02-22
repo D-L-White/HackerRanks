@@ -1,0 +1,41 @@
+int truckTour(vector<vector<int>> petrolpumps) {
+    // count of stops to be made
+    int stops = petrolpumps.size();
+    int start = -1;
+    
+    // check each starting position
+    for (int i = 0; i < petrolpumps.size(); i++) {
+        // get first station gas and consume distance to next
+        int gasTank = petrolpumps[i][0];
+        gasTank -= petrolpumps[i][1];
+        // ensure not out of gas before reaching next station
+        if (gasTank < 0) {
+            // move on to next starting station if so
+            continue;
+        }
+        
+        // decrement value for stops still to go
+        int stopsToGo = stops - 1;
+        // next station in vector
+        int next = (i + 1) % petrolpumps.size();
+        // loop through all stops until back at starting position
+        while (stopsToGo > 0) {
+            // fill gas at new station and use gas to get to next
+            gasTank += petrolpumps[next][0];
+            gasTank -= petrolpumps[next][1];
+            // couldn't make it to the next one, get out of this loop from start position i and move to next start position
+            if (gasTank < 0) {
+                break;
+            }
+            // get next spot and decrement stops to go
+            next = (next + 1) % petrolpumps.size();
+            stopsToGo--;
+        }
+        // made it through all stops with just enough or some to spare, break out of checks as found first station to start from
+        if (gasTank >= 0) {
+            start = i;
+            break;
+        }
+    }
+    return start;
+}
