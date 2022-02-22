@@ -1,0 +1,28 @@
+void minimumBribes(vector<int> q) {
+    // tracking of bribes and who is at end of queue
+    int totalBribes = 0;
+    int lastSpot = q[q.size()-1];
+    
+    // loop from end of queue
+    for (int i = q.size()-2; i >= 0; i--) {
+        // if position is is more than two off from where it should be
+        if (q[i] > i+3) {
+            cout<< "Too chaotic" << endl;
+            return;
+        }
+        // if exactly two off from where it should be
+        else if (q[i] == i+3) {
+            totalBribes +=2;
+        }
+        // if simply bigger than the last one
+        else if (q[i] > lastSpot) {
+            totalBribes++;
+        }
+        // it becomes the last one
+        else {
+            lastSpot = q[i];
+        }
+    }
+    
+    cout << totalBribes << endl;
+}
