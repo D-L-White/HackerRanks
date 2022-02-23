@@ -1,0 +1,78 @@
+class Trie {
+    public:
+    // add a word to the trie and check if there is already another word in there
+    //  that is a prefix of this word
+    bool insert(const string& word) {
+        // start from the top node (first char node)
+        Node* node = &root;
+        
+        // loop through each letter in word being checked
+        //  each letter operates at the node beneath the previous letter's positon
+        for (char c : word) {
+            // check for this character
+            auto found = node->children.find(c);
+            // no such character, will need to add a node to go down further
+            if (found == node->children.end()) {
+                // check if this deep into inserting a new word is an already entered prefix
+                if (node->isWord) {
+                    return true;
+                }
+                
+                // get ready to add a the letter
+                Node* newNode = new Node();
+                
+                // add this letter to the children map
+                node->children[c] = unique_ptr<Node>(newNode);
+                // move down the chain for next letter
+                node = newNode;
+            }
+            // this letter was found
+            else {
+                // this deep is an already entered prefix
+                if (node->isWord) {
+                    return true;
+                }
+                // move down the chain
+                node = found->second.get();
+            }
+        }
+        // entire word added to trie
+        
+        // check if it was already in the trie as prefix of self
+        if (node->isWord) {
+            return true;
+        }
+        // set word's last char as end of itself
+        node->isWord = true;
+        // return true if this word is a prefix of words previously included
+        return node->children.size() > 0;
+    }
+    
+    // structure for nodes associated to chars of words
+    struct Node {
+        // is this letter the end of a vetted word
+        bool isWord = false;
+        // map at each potential character pointing towards the next characters
+        unordered_map<char, unique_ptr<Node>> children;
+    };
+    // a head node to fill with first letters of words
+    Node root;
+};
+
+
+void noPrefix(vector<string> words) {
+    // trie to hold all prefixes
+    Trie preTrie;
+    // work through all words
+    for (auto word : words) {
+        // check if this word has a prefix or is a prefix of a word already done
+        if(preTrie.insert(word)) {
+            // print out fail and what word it occurs with
+            cout << "BAD SET" << endl;
+            cout << word << endl;
+            return;
+        }
+    }
+    // no prefixes in the vector
+    cout << "GOOD SET" << endl;
+}
