@@ -1,0 +1,91 @@
+typedef struct {
+    // original doughs
+    queue<int> oldDough;
+    // new mixes
+    queue<int> newDough;
+    
+    // to fill with the initial first set of doughs
+    void fillQueue(int val) {
+        oldDough.push(val);
+    }
+    
+    // for adding any newly mixed dough
+    void enQueue(int val) {
+        newDough.push(val);
+    }
+    
+    // to take the next least sweet dough
+    int deQueue() {
+        // no doughs, impossible to make
+        if (oldDough.size() == 0 && newDough.size() == 0) {
+            return -1;
+        }
+        // take dough values for compare
+        int oldDoughVal = INT_MAX;
+        if (oldDough.size() > 0) {
+            oldDoughVal = oldDough.front();
+        }
+        int newDoughVal = INT_MAX;
+        if (newDough.size() > 0) {
+            newDoughVal = newDough.front();
+        }
+        // remove and return the smaller of front of queues
+        if (oldDoughVal <= newDoughVal) {
+            oldDough.pop(); 
+            return oldDoughVal;
+        }
+        else {
+            newDough.pop();
+            return newDoughVal;
+        }
+    }   
+} cookieQueue;
+
+
+int cookies(int k, vector<int> A) {
+    // sort for proper queue order
+    sort(A.begin(), A.end());
+    // build and fill with original sets of doughs
+    cookieQueue doughs;
+    for (int i = 0; i < A.size(); i++) {
+        doughs.fillQueue(A[i]);
+    }
+    
+    // variables to hold counts and comparison data
+    int result = 0;
+    int dough1 = 0;
+    int dough2 = 0;
+    int mixedDough = 0;
+    
+    // loop until an end case
+    while (true) {
+        // get the two least sweet doughs
+        dough1 = doughs.deQueue();
+        dough2 = doughs.deQueue();
+        // mix to get their new value
+        mixedDough = dough1 + (dough2 * 2);
+        
+        // if they are already sweet enough, break out to return result count
+        if (dough1 >= k && dough2 >= k) {
+            break;
+        }
+        
+        // if second dough is -1, there was no valid dough for mix to work with
+        if (dough2 == -1) {
+            // if dough1 is sweet enough, no need to mix, return result
+            if (dough1 >= k) {
+                return result;
+            }
+            // never got sweet enough, return -1
+            else {
+                return -1;
+            }
+        }
+        
+        // put newly made dough into newDough portion of cookieQueue
+        doughs.enQueue(mixedDough);
+        // increment result for the latest mixing
+        result++;
+    }
+    return result;
+}
