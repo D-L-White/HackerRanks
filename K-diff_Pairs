@@ -1,0 +1,27 @@
+int pairs(int k, vector<int> arr) {
+    // count of how many pairs
+    int result = 0;
+    // count of each number in the array
+    unordered_map<int, int> numsCount;
+    
+    // get a count of each number
+    for (int i = 0; i < arr.size(); i++) {
+        numsCount[arr[i]]++;
+    }
+    
+    // check each number for its pair
+    for (auto num : numsCount) {
+        // if diff is 0, need more than one of a single number
+        if (k == 0) {
+            if(num.second > 1) {
+                result++;
+            }
+        }
+        // need to make sure a number off by k is also in the map
+        else if (numsCount.find(num.first + k) != numsCount.end()) {
+            result++;
+        }
+    }
+    
+    return result;
+}
