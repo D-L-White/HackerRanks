@@ -1,0 +1,80 @@
+// calculating pow(a,b) % mod (primality testing)
+int modpow(int a, int b, int mod) {
+    long x = 1, y = a;
+    while (b > 0) {
+        if (b % 2 == 1) {
+            x = (x * y) % mod;
+        }
+        y = (y * y) % mod;
+        b /= 2;
+    }
+    return x % mod;
+}
+
+
+int legoBlocks(int n, int m) {
+    // largest brick width
+    int maxBrickWidth = 4;
+    // rename for readability
+    int const width = m;
+    int const height = n;
+    // large prime int
+    int primeMod = 1000000007;
+    
+    // if only one layer tall, would need to be a single brick
+    if (height == 1) {
+        return width <= maxBrickWidth ? 1 : 0;
+    }
+    
+    // instantiate and clear for how many permutations could happen on a row up to certain width
+    int permutationAtRow[width];
+    for (int i = 0; i < width; i++) {
+        permutationAtRow[i] = 0;
+    }
+    // fill out how many possible permutations per width
+    for (int i = 0; i < width; i++) {
+        // check previous width builds to determine ways to build out current width
+        for (int j = i - 1; j >= max(0, i - maxBrickWidth); j--) {
+            permutationAtRow[i] = (permutationAtRow[i] + permutationAtRow[j]) % primeMod;
+        }
+        // check if row can be built by single brick
+        //  gets base case started
+        if (i < maxBrickWidth) {
+            permutationAtRow[i]++;
+        }
+    }
+    
+    // instantiate and clear for how many permutations could happen for a wall of certain height
+    int permutationPerWall[width];
+    for (int i = 0; i < width; i++) {
+        permutationPerWall[i] = 0;
+    }
+    // fill how many permutations per wall the row permutations can be stacked
+    for (int i = 0; i < width; i++) {
+        permutationPerWall[i] = modpow(permutationAtRow[i], height, primeMod);
+    }
+    
+    // instatiate and clear for how many valid permutations there can be
+    int validPermutations[width];
+    for (int i = 0; i < width; i++) {
+        validPermutations[i] = 0;
+    }
+    // fill out how many valid permutations per wall
+    for (int i = 0; i < width; i++) {
+        // start with how many permutations
+        validPermutations[i] = permutationPerWall[i];
+        for (int j = 0; j < i; j++) {
+            // check for how many invalid permutations
+            int invalidPermutations = (int)(((long)validPermutations[j] * permutationPerWall[i - j - 1]) % primeMod);
+            // subtract the number of permutations
+            validPermutations[i] -= invalidPermutations;
+            // ensure didn't go to zero without breaking above equation
+            if (validPermutations[i] < 0) {
+                validPermutations[i] += primeMod;
+            }
+        }
+    }
+    
+    // return the valid count for width provided
+    return validPermutations[width - 1];
+}
