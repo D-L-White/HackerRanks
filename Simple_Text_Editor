@@ -1,0 +1,67 @@
+int main() {
+    int instructionCount;
+    cin >> instructionCount;
+    stack<string> strings;
+    string latest = "";
+    
+    for (int i = 0; i <= instructionCount; i++) {
+        // get next instruction
+        string instruction;
+        getline(cin, instruction);
+        
+        // append instruction
+        if (instruction[0] == '1') {
+            // append new addition to old string
+            latest += instruction.substr(2);
+            // save this iteration
+            strings.push(latest);
+        }
+        
+        // deletion instruction
+        else if (instruction[0] == '2') {
+            // get number of letters to erase
+            int numErase = stoi(instruction.substr(2));
+            // erasing entire word
+            if (numErase >= latest.length()) {
+                // remove all and save this iteration
+                latest = "";
+                strings.push(latest);
+            }
+            // erasing just part of it
+            else {
+                // remove part of it and save this iteration
+                latest.erase(latest.length() - numErase);
+                strings.push(latest);
+            }
+        }
+        
+        // print instruction
+        else if (instruction[0] == '3') {
+            int numPrint = stoi(instruction.substr(2));
+            if (numPrint >= 0 || numPrint <= instruction.length()) {
+                // print letter of latest at given position
+                cout << latest[numPrint - 1] << endl;
+            }
+        }
+        
+        // undo instruction
+        else if (instruction[0] == '4') {
+            // ensure a previous state
+            if (!strings.empty()) {
+                // remove last iteration and take in previous
+                strings.pop();
+                if(!strings.empty()) {
+                    latest = strings.top();
+                }
+                else {
+                    latest = "";
+                }
+            }
+            else {
+                latest = "";
+            }
+        }
+    }
+    /* Enter your code here. Read input from STDIN. Print output to STDOUT */   
+    return 0;
+}
