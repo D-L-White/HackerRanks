@@ -1,0 +1,14 @@
+string pangrams(string s) {
+    vector<int> letterCounts;
+    letterCounts.resize(26,0);
+    for (auto letter : s) {
+        letterCounts[tolower(letter) - 'a']++;
+    }
+    sort(letterCounts.begin(), letterCounts.end());
+    if (letterCounts[0] == 0) {
+        return "not pangram";
+    }
+    else {
+        return "pangram";
+    }
+}
