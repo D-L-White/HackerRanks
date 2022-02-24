@@ -1,0 +1,15 @@
+int maxMin(int k, vector<int> arr) {
+    sort(arr.begin(), arr.end());
+    int minimum = arr[0];
+    int max = arr[k-1];
+    int minMax = max-minimum;
+    
+    for (int i = k; i < (int)arr.size(); i++) {
+        minimum = arr[i-k+1];
+        max = arr[i];
+        //int temp = max-minimum;
+        minMax = min(minMax, max-minimum);
+    }
+    
+    return minMax;
+}
