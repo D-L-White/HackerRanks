@@ -1,0 +1,23 @@
+string balancedSums(vector<int> arr) {
+    if (arr.size() == 1) {
+        return "YES";
+    }
+    int leftSum = 0;
+    int rightSum = 0;
+    for (int i = 1; i < arr.size(); i++) {
+        rightSum +=arr[i];
+    }
+    
+    if(leftSum == rightSum) {
+        return "YES";
+    }
+    for (int i = 1; i < arr.size(); i++) {
+        leftSum += arr[i-1];
+        rightSum -= arr[i];
+        if (leftSum == rightSum) {
+            return "YES";
+        }
+    }
+    
+    return "NO";
+}
