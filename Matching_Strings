@@ -1,0 +1,16 @@
+vector<int> matchingStrings(vector<string> strings, vector<string> queries) {
+    vector<int> result;
+    unordered_map<string,int> occurrenceMap;
+    for (auto word : strings) {
+        occurrenceMap[word]++;
+    }
+    for (auto word : queries) {
+        if (occurrenceMap.find(word) != occurrenceMap.end()) {
+            result.push_back(occurrenceMap[word]);
+        }
+        else {
+            result.push_back(0);
+        }
+    }
+    return result;
+}
