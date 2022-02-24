@@ -1,0 +1,19 @@
+int birthday(vector<int> s, int d, int m) {
+    int result = 0;
+    int bite = 0;
+    for (int i = 0; i < m; i++) {
+        bite += s[i];
+    }
+    if (bite == d) {
+        result++;
+    }
+    
+    for (int i = m; i < s.size(); i++) {
+        bite -= s[i-m];
+        bite += s[i];
+        if (bite == d) {
+            result++;
+        }
+    }
+    return result;
+}
