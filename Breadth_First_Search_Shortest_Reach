@@ -1,0 +1,57 @@
+vector<int> bfs(int n, int m, vector<vector<int>> edges, int s) {
+    // respective distance from start to each node
+    //  initialized as can't reach (-1)
+    vector<int> distances;
+    distances.resize(n + 1, -1);
+
+    // if a path to given node has been visited
+    //  initialized as not visited
+    vector<bool> visited;
+    visited.resize(n + 1, false);
+    
+    // change edges into an array of node indexes and what is adjacent to each
+    vector<list<int>> andjacentList;
+    andjacentList.resize(n + 1);
+    for (auto edge: edges) {
+        int from = edge[0];
+        int to = edge[1];
+        // both directions as is not single directional
+        andjacentList[from].push_back(to);
+        andjacentList[to].push_back(from);
+    }
+
+    // initially visit start position with 0 distance to self
+    visited[s] = true;
+    distances[s] = 0;
+    
+    // queue for upcoming visited nodes to move from
+    //  initial start node in place
+    queue<int> nodeQueue;
+    nodeQueue.push(s);
+
+    // move from node to node until any reachable have been moved from
+    while(nodeQueue.empty() != true) {
+        // the current node to be moved from
+        int current = nodeQueue.front();
+        // remove it for next loop
+        nodeQueue.pop();
+
+        // work through all neighbors to current node
+        for (auto next : andjacentList[current]) {
+            // if not visited yet
+            if (visited[next] == false) {
+                // say it will have been visited
+                visited[next] = true;
+                // distance to it is 6 more than what it took to get to current
+                distances[next] = distances[current]+6;
+                // add it to queue as another node that can be travelled from 
+                nodeQueue.push(next);
+            }
+        }
+    }
+
+    // remove starting node and 0 node (used for easier indexing) from distances vector
+    distances.erase(distances.begin() + s);
+    distances.erase(distances.begin());
+    return distances;
+}
