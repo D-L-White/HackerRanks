@@ -1,0 +1,19 @@
+string gridChallenge(vector<string> grid) {
+    // sort the rows
+    for (int row = 0; row < grid.size(); row++) {
+        sort(grid[row].begin(), grid[row].end());
+    }
+    
+    // check each row against the next one
+    for (int row = 0; row < grid.size() - 1; row++) {
+        // looping through all characters
+        for (int col = 0; col < grid.size(); col++) {
+            // to see if alpabetical
+            if (grid[row][col] > grid[row+1][col]) {
+                return "NO";
+            }
+        }
+    }
+    
+    return "YES";
+}
