@@ -1,0 +1,10 @@
+vector<int> countingSort(vector<int> arr) {
+    vector<int> result;
+    result.resize(100,0);
+    
+    for (auto num : arr) {
+        result[num]++;
+    }
+    
+    return result;
+}
