@@ -1,0 +1,11 @@
+int diagonalDifference(vector<vector<int>> arr) {
+    int lrSum = 0;
+    int rlSum = 0;
+    int row = 0;
+    for (int i = 0; i < arr.size(); i++) {
+        lrSum += arr[row][i];
+        rlSum += arr[row][arr.size()-i-1];
+        row++;
+    }
+    return abs(lrSum - rlSum);
+}
