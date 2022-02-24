@@ -1,0 +1,9 @@
+int lonelyinteger(vector<int> a) {
+    int result = 0;
+    
+    for (auto num : a) {
+        result ^= num;
+    }
+    
+    return result;
+}
