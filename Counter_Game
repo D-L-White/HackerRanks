@@ -1,0 +1,27 @@
+string counterGame(long n) {
+    // how many turns have occurred
+    int turnCount = 0;
+    
+    // loop until we reach 1 and the game ends
+    while (n != 1) {
+        // calculate the next largest power of two
+        long temp = 1;
+        while (temp <= n) {
+            temp *= 2;
+        }
+        temp /= 2;
+        
+        // check if n is a power of two
+        if (temp == n) {
+            n/= 2;
+        }
+        else {
+            n -= temp;
+        }
+        // increment the turn for next player
+        turnCount++;
+    }
+    
+    // see whos turn it was and return winner
+    return turnCount % 2 == 0 ? "Richard" : "Louise";
+}
