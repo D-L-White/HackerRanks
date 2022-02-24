@@ -1,0 +1,13 @@
+long sumXor(long n) {
+    long result = 0;
+    
+    // get count of non-leading zeros within number's binary representation
+    while (n > 0) {
+        if (n % 2 == 0) {
+            result++;
+        }
+        n /= 2;
+    }
+    
+    return pow(2, result);
+}
