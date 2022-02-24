@@ -1,0 +1,27 @@
+void plusMinus(vector<int> arr) {
+    if (arr.size() == 0) {
+        return;
+    }
+    double zero = 0;
+    double pos = 0;
+    double neg = 0;
+    for (auto num : arr) {
+        if (num == 0) {
+            zero++;
+        }
+        else if (num > 0) {
+            pos++;
+        }
+        else {
+            neg++;
+        }
+    }
+    
+    double zeroRat = zero / arr.size();
+    double posRat = pos / arr.size();
+    double negRat = neg / arr.size();
+    
+    cout << fixed << setprecision(6) << posRat << endl;
+    cout << fixed << setprecision(6) << negRat << endl;
+    cout << fixed << setprecision(6) << zeroRat << endl;
+}
