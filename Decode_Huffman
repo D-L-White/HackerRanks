@@ -1,0 +1,37 @@
+/* 
+The structure of the node is
+
+typedef struct node {
+
+	int freq;
+    char data;
+    node * left;
+    node * right;
+    
+} node;
+
+*/
+
+
+void decode_huff(node* root, string s) {
+    // temporary node to move around the tree with
+    node* temp = root;
+    // resulting string post decoding
+    string result = "";
+    
+    // loop through the binary encoded string
+    for (int i = 0; i < s.length(); i++) {
+        // take a left at 0 or at right at 1
+        temp = (s[i] == '0') ? temp->left : temp->right;
+        
+        // if this ends up at a leaf
+        if (!temp->left && !temp->right){
+            // concatinate letter to result
+            result += temp->data;
+            // start again from the root for next encoded bit
+            temp = root;
+        }
+    }
+    
+    cout << result;
+}
