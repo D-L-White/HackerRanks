@@ -1,0 +1,6 @@
+long flippingBits(long n) {
+    // mask for performing bit flip with XOR
+    unsigned mask = 0xffffffff;
+    long result = n ^ mask;
+    return result;
+}
