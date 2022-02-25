@@ -1,0 +1,15 @@
+// helping sorting function
+bool sortFunc (string left, string right) {
+    // if they're the same length, compare their values
+    if (left.length() == right.length()) {
+        return left < right;
+    }
+    // if different lengths, the shorter string comes first
+    return left.length() < right.length();
+}
+
+vector<string> bigSorting(vector<string> unsorted) {
+    // sort vector using my sorting helper
+    sort(unsorted.begin(), unsorted.end(), sortFunc);
+    return unsorted;
+}
