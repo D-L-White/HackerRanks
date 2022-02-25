@@ -1,0 +1,49 @@
+int getTotalX(vector<int> a, vector<int> b) {
+    // sorted to ensure while loop runs as short as can be
+    sort(a.begin(), a.end());
+    sort(b.begin(), b.end());
+    // will only need to run from smallest numbe to largest number
+    int start = min(a[0], b[0]);
+    int end = max(a[a.size()-1], b[b.size()-1]);
+    
+    // running count of how many integers satisfy the condition
+    int result = 0;
+    
+    // starting position for checking
+    int num = start;
+    
+    // loop until no more could be valid
+    while (num <= end) {
+        // counts for how many from each vector had condition satisfied by current num
+        int count1 = 0;
+        int count2 = 0;
+        
+        // check condition one
+        for (int i = 0; i < a.size(); i++) {
+            if (num % a[i] == 0) {
+                count1++;
+            }
+        }
+        // if failed on condition, simply move on (skip the next condition check loop)
+        if (count1 != a.size()) {
+            num++;
+            continue;
+        }
+        
+        // check condition two
+        for (int i = 0; i < b.size(); i++) {
+            if (b[i] % num == 0) {
+                count2++;
+            }
+        }
+        // if both were successful, increase counter
+        if (count2 == b.size()) {
+            result++;
+        }
+        
+        // move on to next number
+        num++;
+    }
+    
+    return result;
+}
