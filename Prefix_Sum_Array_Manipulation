@@ -1,0 +1,34 @@
+long arrayManipulation(int n, vector<vector<int>> queries) {
+    // table to hold the values
+    vector<long> table(n,0);
+    
+    // perform all queries
+    for(auto query : queries) {
+        // add the value to front of where it fills out
+        table[query[0] - 1] += query[2];
+        // if not off the end
+        if (query[1] < n) {
+            // subtract for after where it fills
+            table[query[1]] -= query[2];
+        }
+    }
+    // running total of what would be at any given position
+    long prefixSum = 0;
+    // current running highest total
+    long maxVal = 0;
+    
+    // walk through table
+    //  a first position for fill will have the value that each subsequent should have
+    //  a position after fill will subtract that value so no subsequent ones have it
+    for (auto num : table) {
+        // add the value that is here and should be for next sections
+        //  or subtract what value is no longer here
+        prefixSum += num;
+        // check if it's biggest so far
+        if (prefixSum > maxVal) {
+            maxVal = prefixSum;
+        }
+    }
+    
+    return maxVal;
+}
