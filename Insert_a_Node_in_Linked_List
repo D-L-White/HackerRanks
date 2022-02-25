@@ -1,0 +1,38 @@
+/*
+ * For your reference:
+ *
+ * SinglyLinkedListNode {
+ *     int data;
+ *     SinglyLinkedListNode* next;
+ * };
+ *
+ */
+
+SinglyLinkedListNode* insertNodeAtPosition(SinglyLinkedListNode* llist, int data, int position) {
+    // build node being inserted
+    SinglyLinkedListNode* insertNode = new SinglyLinkedListNode(data);
+    insertNode->data = data;
+    insertNode->next = NULL;
+    
+    // no need to walk list, simply put it at the front and return it 
+    if (position == 0) {
+        insertNode->next = llist;
+        return insertNode;
+    }
+    
+    // get a pointer to walk the list
+    SinglyLinkedListNode* current = llist;
+    
+    // walk the list until reach desired position or last in the line
+    while (position > 1 && current->next != NULL) {
+        current = current->next;
+        position--;
+    }
+    
+    // put it in place
+    insertNode->next = current->next;
+    current->next = insertNode;
+    
+    // return front of the list
+    return llist;
+}
