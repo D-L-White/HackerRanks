@@ -1,0 +1,66 @@
+// helper function for what grid will be after each explosion
+vector<string> boom(vector<string> grid) {
+    // better names to work with
+    int rows = grid.size();
+    int cols = grid[0].length();
+    
+    // build a full grid (just before bombs go off, it will be filled)
+    string fullRow = "";
+    for (int col = 0; col < cols; col++) {
+        fullRow+= 'O';
+    }
+    vector<string> result(rows, fullRow);
+    
+    // loop through and remove any destroyed bombs
+    for (int row = 0; row < rows; row++) {
+        for (int col = 0; col < cols; col++) {
+            if (grid[row][col] == 'O') {
+                // the ones that blew up
+                result[row][col] = '.';
+                // those around them
+                if (row != 0) {
+                    result[row-1][col] = '.';
+                }
+                if (row != rows-1) {
+                    result[row+1][col] = '.';
+                }
+                if (col != 0) {
+                    result[row][col-1] = '.';
+                }
+                if (col != cols-1) {
+                    result[row][col+1] = '.';
+                }
+            }
+        }
+    }
+    
+    // return the resulting grid of bombs
+    return result;
+}
+
+vector<string> bomberMan(int n, vector<string> grid) {
+    // no explosion takes place in first two seconds
+    if (n < 2) {
+        return grid;
+    }
+    
+    // even second intervals have a full board of bombs
+    if (n % 2 == 0) {
+        string row = "";
+        for (int i = 0; i < grid[0].length(); i++) {
+            row += 'O';
+        }
+        for (int i = 0; i < grid.size(); i++) {
+            grid[i] = row;
+        }
+        return grid;
+    }
+    
+    // state after first explosion
+    if ((n - 1) % 4 != 0) {
+        return boom(grid);
+    }
+    
+    // state after second explosion
+    return boom(boom(grid));
+}
