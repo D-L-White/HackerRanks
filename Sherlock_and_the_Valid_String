@@ -1,0 +1,28 @@
+string isValid(string s) {
+    // map containing all letters and their use counts
+    map<char,int> letterCounts;    
+    for (int i = 0; i < s.length(); i++) {
+        letterCounts[s[i]]++;
+    }
+    // bool for if we've found another letter used a different number of times
+    bool another = false;
+    
+    // loop through each letter and their use counts
+    for (auto left = letterCounts.begin(), right = letterCounts.begin()++; right != letterCounts.end(); right++) {
+        // if it's the same use count as the first one we have, move on
+        if (left->second == right->second) {
+            continue;
+        }
+        // another use count found that is either 1 or one off from what we have
+        //  AND haven't seen a second letter use count yes
+        else if ((right->second == 1 || abs(left->second - right->second) == 1)
+                  && another == false) {
+            another = true;
+        }
+        // seen too many use counts
+        else {
+            return "NO";
+        }
+    }
+    return "YES";
+}
