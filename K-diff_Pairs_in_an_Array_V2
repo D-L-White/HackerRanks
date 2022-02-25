@@ -1,0 +1,29 @@
+int pairs(int k, vector<int> arr) {
+    // running total of pairs
+    int result = 0;
+    
+    // sort for ease of checking
+    sort(arr.begin(), arr.end());
+    
+    // compare left pointer
+    for (int left = 0; left < arr.size(); left++) {
+        // ... to right pointer
+        for (int right = left + 1; right < arr.size(); right++) {
+            // find their difference
+            int difference = arr[right] - arr[left];
+            // if difference is target
+            if (difference == k) {
+                // increment result
+                result++;
+                // break out as all values are unique
+                break;
+            }
+            // right is too far past, no further values can net the difference
+            else if (difference > k) {
+                break;
+            }
+        }
+    }
+    
+    return result;
+}
