@@ -1,0 +1,140 @@
+// helper to assist in sorting entire heap from end to front
+void heapUp(vector<int>& qheap){
+    // starting position at end of heap (for just added element)
+    int index = qheap.size() - 1;
+    
+    // loop through entire heap until reach the front
+    while (index > 0) {
+        // if this position is less that that further down via binary search to base
+        if (qheap[(index - 1) / 2] > qheap[index]) {
+            // cache it
+            int temp = qheap[index];
+            // move larger one up
+            qheap[index] = qheap[(index - 1) / 2];
+            // put smaller down
+            qheap[(index - 1) / 2] = temp;
+        }
+        // binarily split down for search
+        index = (index - 1) / 2;
+    }
+}
+
+// helper to assist in sorting entire heap from a specific index up
+void heapDown(vector<int>& qheap, int n){
+    // loop until a break point
+    while (true) {
+        // start up the chain
+        int index = 2 * n + 1;
+        
+        // ensure within bounds for comparison
+        if (index + 1 < qheap.size()) {
+            
+            // if next is smaller than this
+            if (qheap[index] > qheap[index + 1]) {
+                // hold its index
+                index += 1;
+            }
+            
+            // check if the one swapped down to removed position is larger
+            if (qheap[n] > qheap[index]) {
+                // swap it down if so
+                swap(qheap[n], qheap[index]);
+                // repeat from this indexed position
+                n = index;
+                continue;
+            }
+            // didn't jump to something smaller
+            break;
+        }
+        
+        // checking within bounds (only at end as otherwise above if gets it)
+        if (index < qheap.size()) {
+            // check if removed spot is bigger than index 
+            if (qheap[n] > qheap[index]) {
+                // swap the index down if so
+                swap(qheap[n], qheap[index]);
+                // set as next index start point
+                n = index;
+                continue;
+            }
+            break;
+        }
+        
+        break;
+    }
+}
+
+int getIndex(vector<int>& qheap, int target){
+    int index = 0;
+    
+    // find the target value and return its index
+    for (int i = 0; i < qheap.size(); i++) {
+        if (qheap[i] == target) {
+            index = i;
+            break;
+        }
+    }
+    
+    return index;
+}
+
+// main to be ran
+int main() {
+    // take in how many queries will be ran
+    int queryCount;
+    cin >> queryCount;
+    // a vector to act as our heap
+    vector<int> qheap;
+    
+    // loop through all queries provided
+    for (int i = 0; i < queryCount; i++) {
+        // get what type of query it will be 
+        int queryType;
+        cin >> queryType;
+        // to hold values for queries 1 and 2 and index for removal in query 2
+        int val;
+        int index;
+        
+        // branch path for any query type
+        switch(queryType) {
+            // add element query
+            case 1:
+                // take in value to be added
+                cin >> val;
+                // add the value to the back
+                qheap.push_back(val);
+                // sort the heap back into proper order
+                heapUp(qheap);
+                break;
+                
+            // remove element query
+            case 2:
+                // take in value to be removed
+                cin >> val;
+                
+                // find index of the element
+                index = getIndex(qheap, val);
+                
+                // needs to be a heap to remove
+                if (qheap.size() > 0) {
+                    // replace removed value with one at the end of heap (largest)
+                    qheap[index] = qheap.back();
+                    // remove the now duplicate value
+                    qheap.pop_back();
+                    // sort the heap back into proper order
+                    heapDown(qheap, index);
+                }
+                break;
+                
+            // print minimum query
+            case 3:
+                // ensure values in heap
+                if (qheap.size() > 0) {
+                    // first is the smallest as add or remove queries keep minimum at bottom
+                    cout << qheap[0] << endl;
+                }
+            break;
+        }
+    }
+    return 0;
+}
