@@ -1,0 +1,37 @@
+// helper to find height of each stack
+int stackHeight(vector<int>& stack) {
+    int height = 0;
+    for (auto piece : stack) {
+        height += piece;
+    }
+    return height;
+}
+
+int equalStacks(vector<int>& h1, vector<int>& h2, vector<int>& h3) {
+    // get height of each
+    int height1 = stackHeight(h1);
+    int height2 = stackHeight(h2);
+    int height3 = stackHeight(h3);
+    
+    // as long as they aren't the same height
+    while (height1 != height2 || height2 != height3) {
+        // find which is largest
+        int maxHeight = max(height1, max(height2, height3));
+        
+        // subtract the next block off of whichever is largest and remove the block
+        if (height1 == maxHeight) {
+            height1 -= h1[0];
+            h1.erase(h1.begin());
+        }
+        if (height2 == maxHeight) {
+            height2 -= h2[0];
+            h2.erase(h2.begin());
+        }
+        if (height3 == maxHeight) {
+            height3 -= h3[0];
+            h3.erase(h3.begin());
+        }
+    }
+    
+    return height1;
+}
