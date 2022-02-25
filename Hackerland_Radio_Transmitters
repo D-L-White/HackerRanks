@@ -1,0 +1,31 @@
+int hackerlandRadioTransmitters(vector<int> x, int k) {
+    // sort houses into order in case not already
+    sort(x.begin(), x.end());
+    
+    // will need at least 1 radio
+    int radios = 1;
+    // house with a radio on it
+    int last = x[0];
+    // furthest back house covered
+    int covered = x[0];
+    
+    // loop through the houses
+    for (auto house : x) {
+        // too far from the last house's radio, will need its own
+        if (house - last > k) {
+            // add a radio
+            radios++;
+            // it's on this house
+            last = house;
+            // this house is covered
+            covered = house;
+        }
+        // from here, the first covered in chain will still be so
+        else if (house - covered <= k) {
+            // move radio forward to this house
+            last = house;
+        }
+    }
+    
+    return radios;
+}
