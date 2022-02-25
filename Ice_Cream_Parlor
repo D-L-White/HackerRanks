@@ -1,0 +1,24 @@
+vector<int> icecreamParlor(int m, vector<int> arr) {
+    // resulting vector of choices
+    vector<int> result;
+    // map of inverse cost to use all their money
+    //  paired with how much other was and what position it was
+    unordered_map<int,vector<int>> costMap;
+    
+    // loop through all costs
+    for (int i = 0; i < arr.size(); i++) {
+        // this is a opposing cost for one already seen
+        if (costMap.find(arr[i]) != costMap.end()) {
+            // put the opposing cost's positon and this position in and break out
+            result.push_back(costMap[arr[i]][1] + 1);
+            result.push_back(i+1);
+            break;
+        }
+        // haven't seen the opposing cost
+        if (m-arr[i] > -1) {
+            // record the opposing cost in map and this cost and positon
+            costMap[m - arr[i]] = {arr[i], i};
+        }
+    }
+    return result;
+}
