@@ -1,0 +1,35 @@
+int anagram(string s) {
+    // ensure a legit string that can be evenly split
+    if (s.length() % 2 != 0) {
+        return -1;
+    }
+    
+    // running total of differences
+    int result = 0;
+    
+    // split into two words
+    string leftSide = s.substr(0, s.length()/2);
+    string rightSide = s.substr(s.length()/2);
+    
+    // faux map for tracking letter counts in the two halves
+    int letterMix[26] = {0};
+    
+    // add all letters to faux map from left side
+    for (int i = 0; i < leftSide.length(); i++) {
+        letterMix[leftSide[i] - 'a']++;
+    }
+    // subtract all letters from faux map from right side
+    for (int i = 0; i < rightSide.length(); i++) {
+        letterMix[rightSide[i] - 'a']--;
+    }
+    // any letter that was in both of them cancels out
+    //  any letter in one but not the other is either 1 or -1
+    
+    // get a count of the total differences
+    for (int i = 0; i < 26; i++) {
+        result += abs(letterMix[i]);
+    }
+    
+    // only need to change character in one of the two halves
+    return result / 2;
+}
