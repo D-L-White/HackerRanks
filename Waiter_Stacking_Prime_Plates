@@ -1,0 +1,79 @@
+/*
+ * Complete the 'waiter' function below.
+ *
+ * The function is expected to return an INTEGER_ARRAY.
+ * The function accepts following parameters:
+ *  1. INTEGER_ARRAY number
+ *  2. INTEGER q
+ */
+ 
+// helper to find the next prime for next iteration
+int nextPrime(int prime) {
+    // move up a number to check
+    prime++;
+    // check all numbers beneath it for if can be divided evenly
+    for (int i = 2; i < prime; i++) {
+        // if possible to be divided evenly, try again with next number
+        if (prime % i == 0) {
+            prime++;
+            i = 2;
+        }
+    }
+    return prime;
+}
+
+vector<int> waiter(vector<int> number, int q) {
+    // current prime for iteration
+    int prime = 2;
+    
+    // cache of results
+    vector<int> result;
+    
+    // second A and B for filling
+    vector<int> A2;
+    vector<int> B;
+    
+    // while iterations still to go
+    while (q > 0) {
+        // if no more plates, exit iterations early
+        if (number.size() == 0) {
+            break;
+        }
+        
+        // start with end of stack of plates
+        for (int i = number.size() - 1; i >= 0; i--) {
+            // see if they go into B
+            if (number[i] % prime == 0) {
+                B.push_back(number[i]);
+            }
+            // else go into A2
+            else {
+                A2.push_back(number[i]);
+            }
+        }
+        
+        // move all that went into B into result
+        for (int i = B.size()-1; i >= 0; i--) {
+            result.push_back(B[i]);
+        }
+        
+        // update plate stack for next iteration
+        number = A2;
+        // clear for next iteration
+        B.clear();
+        A2.clear();
+        // move to next prime for iteration
+        prime = nextPrime(prime);
+        q--;
+    }
+    
+    // if still plates in "A1" after iterations complete
+    if (number.size() != 0) {
+        for (int i = number.size()-1; i >= 0; i--) {
+            // move them to result
+            result.push_back(number[i]);
+        }
+    }
+    
+    return result;
+}
