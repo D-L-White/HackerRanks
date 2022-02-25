@@ -1,0 +1,41 @@
+vector<int> climbingLeaderboard(vector<int> ranked, vector<int> player) {
+    // working from playeys highest score down
+    int index= player.size()-1;
+    // starting with potentially being in first
+    int rank = 1;
+    // starting at highest rank
+    int prev = ranked[0];
+    // prebuilt vector for player ranks to fill at specific positions
+    vector<int> result(player.size(),0);
+    
+    // loop through all ranks
+    for (int i =0; i<ranked.size(); i++) {
+        // if this isn't same score as the previous one
+        if(ranked[i]!=prev){
+            // cache score
+            prev=ranked[i];
+            // move on to next rank
+            rank++;
+        }
+        // as long as the score being checked is same or larger than current spot
+        while(player[index]>=ranked[i]){
+            // record the score's rank
+            result[index]=rank;
+            // move to next score
+            index--;
+            // don't overshoot lowest score
+            if(index<0){
+                break;
+            }
+        }
+    }
+    
+    // in case scores left to be ranked
+    //  all will be the lowest score at the time they are put in
+    rank++;
+    for (int j = 0; j<=index; j++) {
+        result[j]=rank;
+    }
+
+    return result;
+}
