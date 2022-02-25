@@ -1,0 +1,25 @@
+DoublyLinkedListNode* reverse(DoublyLinkedListNode* llist) {
+    // pointers to walk and keep track of nodes around one being worked on
+    DoublyLinkedListNode* current = llist;
+    DoublyLinkedListNode* temp = NULL;
+    
+    // whil we're still able to walk the list
+    while (current != NULL) {
+        // temp becomes what is before the node being worked on
+        //  done so we don't lose connection
+        temp = current->prev;
+        // change what was in front to be what is behind
+        current->prev = current->next;
+        // change what was behind to  be in front
+        current->next = temp;
+        // move towards what was in front but is now behind
+        current = current->prev;
+    }
+
+    // in case we were given a NULL list
+    if (temp != NULL) {
+        // if we walked the list, temp would be second from original end
+        llist = temp->prev;
+    }
+    return llist;
+}
