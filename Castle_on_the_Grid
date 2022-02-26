@@ -1,0 +1,69 @@
+struct Cell {
+    int x;
+    int y;
+    int steps;
+    Cell(int newX, int newY, int newSteps) {
+        x = newX;
+        y = newY;
+        steps = newSteps; 
+    }
+};
+
+int minimumMoves(vector<string> grid, int startX, int startY, int goalX, int goalY) {
+    // a maximum value for the grid to keep from running into walls 
+    int n = grid.size();
+    
+    // all the directions available to move from a position (up, down, right, left)
+    vector<pair<int, int>> moves = { make_pair(1, 0), make_pair(-1, 0), make_pair(0, 1), make_pair(0, -1) };
+    
+    // collection of all the positions we have already visited (to ensure no backtracking)
+    vector<vector<bool>> visited;
+    visited.resize(n, vector<bool>(n, false));
+    
+    // a queue of positions
+    queue<Cell> stepQueue;
+    // starting position added to the queue with 0 steps made so far
+    stepQueue.emplace(startX, startY, 0);
+    // record already visited start position
+    visited[startX][startY] = true;
+    
+    // loop until there aren't any more pathways that could be taken
+    while (!stepQueue.empty()) {
+        // where we are at during this loop
+        Cell curr = stepQueue.front();
+        // remove it from the queue
+        stepQueue.pop();
+        
+        // try each of the moves
+        for (pair<int, int>& move : moves) {
+            // our current position after the move being checked from stepQueue
+            int newX = curr.x;
+            int newY = curr.y;
+            // loop continuously with this move in a straight line as a single move
+            while (true) {
+                newX += move.first;
+                newY += move.second;
+                // ensure within bounds and not a wall
+                if ((newX >= 0 && newY >= 0) && (newX < n && newY < n) && (grid[newX][newY] == '.')) {
+                    // check if reached goal
+                    if (newX == goalX && newY == goalY) {
+                        // return how many steps to previous position + last step onto goal
+                        return curr.steps + 1;
+                    }
+                    // check if already been here.  if not...
+                    else if (!visited[newX][newY]) {
+                        // mark it as visited
+                        visited[newX][newY] = true;
+                        // add its spot to the queue as a single step further
+                        stepQueue.emplace(newX, newY, curr.steps + 1);
+                    }
+                }
+                // out of bounds or a wall
+                else {
+                    break;
+                }
+            }
+        }
+    }
+    return -1;
+}
