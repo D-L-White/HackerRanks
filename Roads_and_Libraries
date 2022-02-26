@@ -1,0 +1,62 @@
+// structure of a city
+struct city {
+    // those it is connected to
+    vector<int> connectedCities;
+    // if it has been visited yet
+    bool visited;
+};
+
+// helper function to perform a DFS on each city to connect them all
+void DFS(vector<city>& map, int position, int& uniqueRoads) {
+    // cache have been to this city
+    map[position].visited = true;
+    // loop through all potential roads from this city
+    for(auto connectedCity : map[position].connectedCities) {
+        // if haven't visited the next city
+        if (map[connectedCity].visited == false) {
+            // build a road
+            uniqueRoads++;
+            // visit its neighbors
+            DFS(map, connectedCity, uniqueRoads);
+        }
+    }
+}
+
+long roadsAndLibraries(int n, int c_lib, int c_road, vector<vector<int>> cities) {
+    // if it costs more to build roads
+    if (c_road > c_lib) {
+        // cost will be a library for each city
+        return (long)c_lib * (long)n;
+    }
+    
+    // a map of cities
+    //  each with a vector of cities they are connected to and if they have been visited
+    vector<city> map(n, {vector<int>(), false});
+    
+    // counts for how many separate libraries and roads are needed
+    int separateLibrary = 0;
+    int uniqueRoads = 0;
+    
+    // build out the map
+    for (auto city : cities) {
+        // connect any city with its partner and vice versa
+        map[city[0]-1].connectedCities.push_back(city[1]-1);
+        map[city[1]-1].connectedCities.push_back(city[0]-1);
+    }
+    
+    // loop through the map
+    for (int i = 0; i < map.size(); i++) {
+        // if haven't visited the city
+        if (map[i].visited == false) {
+            // it gets a map
+            separateLibrary++;
+            // DFS to all connecting cities
+            //  marks them as visited (map[i] city provides library)
+            //  increments road count
+            DFS(map, i, uniqueRoads);
+        }
+    }
+    
+    // cost is how many libraries and how many roads needed times their respective costs
+    return (long)separateLibrary * (long)c_lib + (long)uniqueRoads * (long) c_road;
+}
