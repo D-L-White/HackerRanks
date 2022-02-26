@@ -1,0 +1,37 @@
+vector<int> solve(vector<int> arr, vector<int> queries) {
+    // collection of all mins of maximums from sub arrays
+    vector<int> result;
+    
+    // check for all sub array sizes
+    for (auto query : queries) {
+        // get the initial sub array
+        vector<int> subArray(arr.begin(), arr.begin()+query);
+        // find the largest element in that
+        //  it will be both the maximum for this array and the minimum for all maximums
+        int min = *max_element(subArray.begin(), subArray.end());
+        int max = min;
+        
+        // move the window allong
+        for (int i = 1; i <= (arr.size() - query); i++) {
+            // if now larger than max, update it
+            if (arr[i] > max) {
+                max = arr[i];
+            }
+            // if just left the maximum behind
+            else if (arr[i - 1] == max) {
+                // get another subarray of query size from here
+                vector<int> sub2(arr.begin()+i, arr.begin()+query+i);
+                // find its maximum
+                max = *max_element(sub2.begin(), sub2.end());;
+            }
+            // update what would be the smallest maximum if needed
+            if (max < min) {
+                min = max;
+            }
+        }
+        // append latest minimum of maximums to result
+        result.push_back(min);
+    }
+    
+    return result;
+}
