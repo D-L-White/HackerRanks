@@ -1,0 +1,67 @@
+string highestValuePalindrome(string s, int n, int k) {
+    // edge case of single letter and allowed to change it
+    if (s.length() == 1 && k > 0) {
+        return "9";
+    }
+
+    // count of how many numbers must be changed
+    int toChange = 0;
+    // only check half as any difference means just one needs to change
+    for (int i = 0; i < s.length()/2; i++) {
+        if (s[i] != s[s.length() - i - 1]) {
+            toChange++;
+        }
+    }
+    
+    // need more changes than available
+    if (toChange > k) {
+        return "-1";
+    }
+    
+    // count of how many changes we'll have extra after changing all non-equal values
+    int extraChange = k - toChange;
+    
+    // loop through front half changing as needed
+    for (int i = 0; i < s.length()/2; i++) {
+        // index of opposing value
+        int pairIndex = s.length() - i - 1;
+        
+        // more than one extra change available and these numbers aren't 9s
+        if (s[i] != '9' && s[pairIndex] != '9' && extraChange > 1) {
+            // if they already weren't equal, we only need to use one extra change
+            if (s[i] != s[pairIndex]) {
+                extraChange--;
+            }
+            // otherwise we use two extra changes
+            else {
+                extraChange -= 2;
+            }
+            // update them both to 9
+            s[i] = '9';
+            s[pairIndex] = '9';
+        }
+        // canif they're not equal
+        else if (s[i] != s[pairIndex]) {
+            // if we still have extra changes, we can use one to set them to 9s
+            if (extraChange > 0 && s[i] != '9' && s[pairIndex] != '9') {
+                s[i] = '9';
+                s[pairIndex] = '9';
+                extraChange -= 1;
+            }
+            // otherwise, set them to their largest value
+            else if (s[i] > s[pairIndex]) {
+                s[pairIndex] = s[i];
+            }
+            else {
+                s[i] = s[pairIndex];
+            }
+        }
+    }
+    
+    // once ran through, if there is a middle digit and extra changes, update it to 9
+    if (extraChange > 0 && s.length() % 2 != 0 && s[s.length()/2 != '9']) {
+        s[s.length()/2] = '9';
+    }
+    
+    return s;
+}
