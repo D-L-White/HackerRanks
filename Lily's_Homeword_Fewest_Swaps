@@ -1,0 +1,51 @@
+int lilysHomework(vector<int> arr) {
+    int result = INT_MAX;
+
+    // create a sorted version of the vector
+    vector<int> sorted(arr);
+    sort(sorted.begin(), sorted.end(), greater<int>());
+
+    // loop through twice in order to find if best to do forward sor backwards
+    for (int rev = 0; rev < 2; rev++) {
+        // count of swaps necessary
+        int swapCount = 0;
+        // reverse it if second time through to see if faster to go through other end
+        if (rev) {
+            reverse(sorted.begin(), sorted.end());
+        }
+        
+        // a copy of the array for use of mutating but keeping original
+        vector<int> arrCopy(arr);
+        
+        // value and index pairs
+        unordered_map<int, int> valIndex;
+        for (int i = 0; i < arrCopy.size(); i++) {
+            valIndex[arrCopy[i]] = i;
+        }
+
+        // loop through each position
+        for (int i = 0; i < arrCopy.size(); i++) {
+            // if it's already where need to be, move to next
+            if (arrCopy[i] == sorted[i]) {
+                continue;
+            }
+            // cache the value at this positon
+            int arrIndex = arrCopy[i];
+            // cache value that should be at this position
+            int sortedIndex = sorted[i];
+
+            // swap the value at this position with what should be there
+            swap(arrCopy[i], arrCopy[valIndex[sortedIndex]]);
+            // increment swap count
+            swapCount++;
+
+            // update positions of elements in map
+            valIndex[arrIndex] = valIndex[sortedIndex];
+            valIndex[sortedIndex] = i;
+        }
+        // result will be whichever direction uses fewest swaps
+        result = min(result, swapCount);
+    }
+
+    return result;
+}
