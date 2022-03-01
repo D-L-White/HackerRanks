@@ -1,0 +1,46 @@
+int find(vector<int>& nodes, int n) {
+    if(nodes[n] < 0) {
+        return n;
+    }
+    else {
+        return nodes[n] = find(nodes, nodes[n]);
+    }
+}
+
+vector<int> componentsInGraph(vector<vector<int>> gb) {
+    int edges = gb.size();
+    int min = INT_MAX;
+    int max = INT_MIN;
+    vector<int> nodes(edges*2+1, -1);
+    
+    // get how many nodes are connected
+    for (int i = 0; i < edges; i++) {
+        int x = find(nodes,gb[i][0]);
+        int y = find(nodes,gb[i][1]);
+        if (x == y) {
+            continue;
+        }
+        
+        nodes[x] += nodes[y];
+        nodes[y] = x;
+    }
+    
+    // sort for max
+    sort(nodes.begin(), nodes.end());
+    max = abs(nodes[0]);
+    
+    // walk for min
+    for (int i = 0 ; i <= 2*edges; i++) {
+        if (nodes[i] < 0) {
+            int x = abs(nodes[i]);
+            if (x > 1 && x < min) {
+                min = x;
+            }
+        }
+        else {
+            break;
+        }
+    }
+    
+    return {min, max};
+}
