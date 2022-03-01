@@ -1,0 +1,18 @@
+int fund(vector<int> prices) {
+    // find the maximum increase
+    // [7, 2, 4, 6, ...]
+    // -1 if never increased or stayed level
+
+    int result = -1;
+    int largest = prices[prices.size()-1];
+    
+    for (int i = prices.size() - 2; i >= 0; i--) {
+    if (prices[i] >= largest) {
+        largest = prices[i];
+    }
+    else {
+        result = max(result, result - prices[i]);
+    }
+    
+    return result;
+}
