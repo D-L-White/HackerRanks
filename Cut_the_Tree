@@ -1,0 +1,49 @@
+// helper to perform depth first search
+void dfs(vector<vector<int>>& nodes, vector<int>& data, vector<bool>& visited, vector<int>& sums, int node) {
+    // running sum
+    int sum = 0;
+    for (int i = 0; i < nodes[node].size(); i++) {
+        if (visited[nodes[node][i]] == false) {
+            // set as seen this node
+            visited[nodes[node][i]] = true;
+            dfs(nodes, data, visited, sums, nodes[node][i]);
+            sum += sums[nodes[node][i]];
+        }
+    }
+    sums[node] = sum + data[node-1];
+}
+
+
+int cutTheTree(vector<int> data, vector<vector<int>> edges) {
+    // cached total of all data
+    int sum = 0;
+    for (auto num : data) {
+        sum += num;
+    }
+    
+    // working minimum and count of nodes
+    int min = sum;
+    int nodeCount = data.size();
+    
+    // 
+    vector<vector<int>> nodes(nodeCount+1);
+    for (auto edge : edges) {
+        nodes[edge[0]].push_back(edge[1]);
+        nodes[edge[1]].push_back(edge[0]);
+    }
+    
+    // sums at each node
+    vector<int> sums(nodeCount + 1, 0);
+    // wheter or not node has been visited
+    vector<bool> visited(nodeCount + 1, 0);
+    visited[1] = true;
+    
+    dfs(nodes, data, visited, sums, 1);
+    for (int i = 2; i <= nodeCount; i++) {
+        if (abs(sum-2 * sums[i]) < min) {
+            min = abs(sum-2 * sums[i]);
+        }
+    }
+    
+    return min;
+}
