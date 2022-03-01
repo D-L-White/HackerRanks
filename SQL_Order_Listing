@@ -1,0 +1,4 @@
+SELECT * FROM Orders
+WHERE status != "DELIVERED"
+ORDER BY date, id
+LIMIT 5
