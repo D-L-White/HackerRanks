@@ -1,0 +1,47 @@
+long func(int i, int j, int k) {
+  // sum from i to j and then j to k
+    if (i == j && j == k) {
+        return i;
+    }
+    
+    long sum = 0;
+    
+    if (i > 0 && j > 0) {
+        sum += (abs(i - j + 1) * (j + i) / 2);
+    }
+    else {
+        if (i <= j) {
+            while (i <= j) {
+                sum += i;
+                i++;
+            }
+        }
+        else {
+            while (j < i) {
+                sum += i;
+                i--;
+            }
+        }
+    }
+    
+    if (j > 0 && k > 0) {
+        sum += (abs(j - k + 1) * (k + j) / 2);
+    }
+    else {
+        if (j <= k) {
+            while (j <= k) {
+                sum += j;
+                j++;
+            }
+        }
+        else {
+            while (j > k) {
+                sum +=j;
+                j--;
+            }
+        }
+        sum += k;
+    }
+    
+    return sum;
+}
