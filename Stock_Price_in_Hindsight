@@ -7,12 +7,12 @@ int fund(vector<int> prices) {
     int largest = prices[prices.size()-1];
     
     for (int i = prices.size() - 2; i >= 0; i--) {
-    if (prices[i] >= largest) {
-        largest = prices[i];
+        if (prices[i] >= largest) {
+            largest = prices[i];
+        }
+        else {
+            result = max(result, result - prices[i]);
+        }
     }
-    else {
-        result = max(result, result - prices[i]);
-    }
-    
     return result;
 }
